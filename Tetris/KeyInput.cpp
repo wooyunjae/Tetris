@@ -18,7 +18,7 @@ KeyInput* KeyInput::GetInstance()
 	return mInstance;
 }
 
-void KeyInput::RenewKeyState()
+void KeyInput::Update()
 {
 	for (auto& key : mKeys)
 	{

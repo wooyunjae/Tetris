@@ -1,4 +1,5 @@
-﻿  GameBoard.cpp
-  GameCore.cpp
+﻿  KeyInput.cpp
+  main.cpp
+  Time.cpp
   코드를 생성하고 있습니다...
-  Tetris.vcxproj -> C:\Users\Woo\Documents\Tetris\Debug\Tetris.exe
+  Tetris.vcxproj -> C:\Users\Woo\Documents\MyGames\Tetris\Debug\Tetris.exe
