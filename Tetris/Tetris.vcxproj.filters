@@ -1,60 +1,104 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Tetris">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Tetris\GameBoard">
+      <UniqueIdentifier>{eea698aa-b1c1-4368-b3bd-5283ddc6329a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tetris\Util">
+      <UniqueIdentifier>{dc0c471f-e3d6-49d5-8d34-fe5527a8bd84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tetris\Input">
+      <UniqueIdentifier>{9cb6dd35-9fae-4401-9222-2aaa100f4506}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tetris\Core">
+      <UniqueIdentifier>{faf7eaf9-b9d6-4f03-a9bf-143dacbba4ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tetris\Scene">
+      <UniqueIdentifier>{45d6b9f7-9530-4bda-b33b-07a473ddda73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCore.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Tetris</Filter>
     </ClCompile>
     <ClCompile Include="GameBoard.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyInput.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Tetris\GameBoard</Filter>
     </ClCompile>
     <ClCompile Include="Time.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Tetris\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyInput.cpp">
+      <Filter>Tetris\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCore.cpp">
+      <Filter>Tetris\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBoardScene.cpp">
+      <Filter>Tetris\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Tetris\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MainScene.cpp">
+      <Filter>Tetris\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Tetris\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap.cpp">
+      <Filter>Tetris\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Tetris\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameCore.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GraphicsAPIHeader.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameBoard.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Tetris</Filter>
     </ClInclude>
     <ClInclude Include="CST.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Tetris\Util</Filter>
     </ClInclude>
-    <ClInclude Include="macro.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="GameBoard.h">
+      <Filter>Tetris\GameBoard</Filter>
     </ClInclude>
-    <ClInclude Include="util.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyInput.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Color.h">
+      <Filter>Tetris\Util</Filter>
     </ClInclude>
     <ClInclude Include="Time.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Tetris\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyInput.h">
+      <Filter>Tetris\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Macro.h">
+      <Filter>Tetris\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore.h">
+      <Filter>Tetris\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBoardScene.h">
+      <Filter>Tetris\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Tetris\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="MainScene.h">
+      <Filter>Tetris\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap.h">
+      <Filter>Tetris\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Tetris\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

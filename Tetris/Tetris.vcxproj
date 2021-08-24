@@ -19,21 +19,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bitmap.cpp" />
+    <ClCompile Include="Color.cpp" />
     <ClCompile Include="GameBoard.cpp" />
+    <ClCompile Include="GameBoardScene.cpp" />
     <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="KeyInput.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainScene.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bitmap.h" />
     <ClInclude Include="CST.h" />
     <ClInclude Include="GameBoard.h" />
+    <ClInclude Include="GameBoardScene.h" />
     <ClInclude Include="GameCore.h" />
     <ClInclude Include="GraphicsAPIHeader.h" />
     <ClInclude Include="KeyInput.h" />
-    <ClInclude Include="macro.h" />
+    <ClInclude Include="Macro.h" />
+    <ClInclude Include="MainScene.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Time.h" />
-    <ClInclude Include="util.h" />
+    <ClInclude Include="Color.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
