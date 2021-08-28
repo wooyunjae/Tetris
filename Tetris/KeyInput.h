@@ -11,7 +11,7 @@ class KeyInput
 {
 private:
 	KeyInput() = default;
-	~KeyInput() = delete;
+	~KeyInput();
 public:
 	static KeyInput* GetInstance();
 	void Update();

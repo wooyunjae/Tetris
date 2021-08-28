@@ -7,10 +7,10 @@ class GameBoard;
 class GameBoardScene : public Scene
 {
 public:
-	GameBoardScene(HWND hwnd, ID2D1Factory* D2DFactory);
+	GameBoardScene(HWND hwnd, HINSTANCE hInstance);
 	virtual ~GameBoardScene();
 
-	HRESULT Initialize() override;
+	HRESULT Initialize(HINSTANCE hInstance) override;
 	void Update() override;
 	void Render() override;
 

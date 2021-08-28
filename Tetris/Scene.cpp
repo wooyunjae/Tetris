@@ -1,9 +1,8 @@
 #include <assert.h>
 #include "Scene.h"
 #include "Macro.h"
-Scene::Scene(HWND hwnd, ID2D1Factory* D2DFactory)
+Scene::Scene(HWND hwnd)
 	: mHwnd(hwnd)
-	, mpCoreGameFactory(D2DFactory)
 	, mpMainRenderTarget(nullptr)
 	, mXpos(0)
 	, mYpos(0)

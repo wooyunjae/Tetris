@@ -1,7 +1,6 @@
 #pragma once
 #include "Cst.h"
 #include "Time.h"
-enum class eKeySet;
 
 class GameBoard
 {

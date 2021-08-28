@@ -1,9 +1,6 @@
 #include <string>
-#include <cstdlib>
 #include <random>
-#include <time.h>
-#include <assert.h>
-#include <iostream>
+
 #include "GameBoard.h"
 #include "KeyInput.h"
 
@@ -28,6 +25,19 @@ void GameBoard::Initializer()
 
 void GameBoard::Update()
 {
+	if (KI->IsKeyDown(static_cast<int>(eKeySet::P))
+		&& mGameState == GAMEPUASE)
+	{
+		mGameState = GAMERUNNING;
+	}
+	else if (KI->IsKeyDown(static_cast<int>(eKeySet::P)))
+	{
+		mGameState = GAMEPUASE;
+	}
+	if (KI->IsKeyDown(static_cast<int>(eKeySet::R)))
+	{
+		Initializer();
+	}
 	if (mGameState == GAMERUNNING)
 	{
 		float deltaTime = mTime.GetDeltaTime();
@@ -53,15 +63,7 @@ void GameBoard::Update()
 		{
 			while (BlockDown());
 		}
-		else if (KI->IsKeyDown(static_cast<int>(eKeySet::P)))
-		{
-
-		}
 		BlockDownByTime();
-	}
-	if (KI->IsKeyDown(static_cast<int>(eKeySet::R)))
-	{
-		Initializer();
 	}
 }
 

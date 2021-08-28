@@ -2,6 +2,14 @@
 
 KeyInput* KeyInput::mInstance = nullptr;
 
+KeyInput::~KeyInput()
+{
+	if (mInstance)
+	{
+		delete mInstance;
+	}
+}
+
 KeyInput* KeyInput::GetInstance()
 {
 	if (!mInstance)
@@ -41,14 +49,12 @@ void KeyInput::Update()
 
 bool KeyInput::IsKeyDown(int key)
 {
-	int lowKey = toupper(key);
-	auto k = mKeys.find(static_cast<eKeySet>(lowKey));
+	auto k = mKeys.find(static_cast<eKeySet>(key));
 	return k->second == eKeyState::DOWN;
 }
 
 bool KeyInput::IsKeyUp(int key)
 {
-	int lowKey = toupper(key);
-	auto k = mKeys.find(static_cast<eKeySet>(lowKey));
+	auto k = mKeys.find(static_cast<eKeySet>(key));
 	return k->second == eKeyState::UP;
 }

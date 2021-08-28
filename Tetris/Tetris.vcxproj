@@ -20,20 +20,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bitmap.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Factorys.cpp" />
     <ClCompile Include="GameBoard.cpp" />
     <ClCompile Include="GameBoardScene.cpp" />
     <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="KeyInput.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainScene.cpp" />
+    <ClCompile Include="MouseInput.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bitmap.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="CST.h" />
+    <ClInclude Include="Factorys.h" />
     <ClInclude Include="GameBoard.h" />
     <ClInclude Include="GameBoardScene.h" />
     <ClInclude Include="GameCore.h" />
@@ -41,6 +46,7 @@
     <ClInclude Include="KeyInput.h" />
     <ClInclude Include="Macro.h" />
     <ClInclude Include="MainScene.h" />
+    <ClInclude Include="MouseInput.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Time.h" />

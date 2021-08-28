@@ -8,14 +8,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	// CoInitialize : COM라이브러리 사용을 위한 초기화 (COM라이브라리 : DirectX)
 	if (SUCCEEDED(CoInitialize(NULL)))
 	{
-		GameCore GameCore;
+		GameCore* pGameCore = new GameCore();
 
-		if (SUCCEEDED(GameCore.Initialize(hInstance)))
+		if (SUCCEEDED(pGameCore->Initialize(hInstance)))
 		{
-			GameCore.RunGameLoop();
+			pGameCore->RunGameLoop();
 		}
-		// CoUninitialize : COM라이브러리 상용 후 해체
+		delete pGameCore;
 		CoUninitialize();
+		// CoUninitialize : COM라이브러리 상용 후 해체
+		
 	}
 	return 0;
 }

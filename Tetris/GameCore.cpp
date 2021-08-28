@@ -8,30 +8,22 @@
 #include "GameBoardScene.h"
 #include "MainScene.h"
 #include "SceneManager.h"
-
+#include "Factorys.h"
 GameCore::GameCore()
 	: mhwnd(nullptr)
-	, mpD2DFactory(nullptr)
 	, isRun(true)
-	, mpWICFactory(nullptr)
 {
 }
 
 GameCore::~GameCore()
 {
-	SAFE_RELEASE(mpD2DFactory);
+	Factorys::DeleteInstance();
 }
 
 HRESULT GameCore::Initialize(HINSTANCE hInstance)
 {
 	HRESULT hr;
-	hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &mpD2DFactory);
-	// WIC 팩토리를 생성함.
-	if (SUCCEEDED(hr))
-	{
-		hr = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&mpWICFactory));
-	}
-	// Creat window
+	// 창 생성
 	WNDCLASSEX wcex = { sizeof(wcex) };
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
 	wcex.lpfnWndProc = WndProc;
@@ -47,8 +39,11 @@ HRESULT GameCore::Initialize(HINSTANCE hInstance)
 		0, 0, 0, 0,
 		NULL, NULL, hInstance, this
 	);
-	SM->SetScene(new MainScene(mhwnd, mpD2DFactory, mpWICFactory));
-	SM->GetScene()->AdjustToCenter();
+	// 최초 씬 생성
+	SM->SetScene(
+		new MainScene(mhwnd, hInstance)
+	);
+	// 창 보이기
 	hr = mhwnd ? S_OK : E_FAIL;
 	if (SUCCEEDED(hr))
 	{
@@ -129,6 +124,11 @@ LRESULT GameCore::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			wasHandled = true;
 			result = 0;
 			break;
+			case WM_LBUTTONUP:
+				POINT pt;
+				GetCursorPos(&pt);
+
+				break;
 			case WM_DESTROY:
 			{
 				pGameCore->isRun = false;

@@ -1,12 +1,13 @@
 #include <assert.h>
 #include "GameBoardScene.h"
 #include "GameBoard.h"
+#include "Factorys.h"
 #include "Macro.h"
 #include "CST.h"
 #include "Color.h"
 
-GameBoardScene::GameBoardScene(HWND hwnd, ID2D1Factory* D2DFactory)
-	: Scene(hwnd, D2DFactory)
+GameBoardScene::GameBoardScene(HWND hwnd, HINSTANCE hInstance)
+	: Scene(hwnd)
 	, mHeight(640)
 	, mWidth(480)
 	, mpGameBoard(nullptr)
@@ -20,7 +21,7 @@ GameBoardScene::GameBoardScene(HWND hwnd, ID2D1Factory* D2DFactory)
 	, mpIGrid(nullptr)
 {
 	mpGameBoard = new GameBoard();
-	if (!SUCCEEDED(Initialize()))
+	if (!SUCCEEDED(Initialize(hInstance)))
 	{
 		assert(false);
 	}
@@ -32,13 +33,13 @@ GameBoardScene::~GameBoardScene()
 	delete mpGameBoard;
 }
 
-HRESULT GameBoardScene::Initialize()
+HRESULT GameBoardScene::Initialize(HINSTANCE hInstance)
 {
 	HRESULT hr = S_OK;
 	if (!mpMainRenderTarget)
 	{
 		D2D1_SIZE_U size = D2D1::SizeU(mWidth, mHeight);
-		hr = mpCoreGameFactory->CreateHwndRenderTarget(
+		hr = FACTORY->GetFactory()->CreateHwndRenderTarget(
 			D2D1::RenderTargetProperties(),
 			D2D1::HwndRenderTargetProperties(mHwnd, size),
 			&mpMainRenderTarget
@@ -210,7 +211,7 @@ HRESULT GameBoardScene::CreateDeviceSource()
 	if (!mpMainRenderTarget)
 	{
 		D2D1_SIZE_U size = D2D1::SizeU(mWidth, mHeight);
-		hr = mpCoreGameFactory->CreateHwndRenderTarget(
+		hr = FACTORY->GetFactory()->CreateHwndRenderTarget(
 			D2D1::RenderTargetProperties(),
 			D2D1::HwndRenderTargetProperties(mHwnd, size),
 			&mpMainRenderTarget

@@ -13,6 +13,7 @@ public:
 	static SceneManager* GetInstance();
 
 	void SetScene(Scene* scene);
+
 	Scene* GetScene();
 private:
 	static SceneManager* mInstance;

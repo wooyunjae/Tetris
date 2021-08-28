@@ -24,6 +24,9 @@
     <Filter Include="Tetris\Scene">
       <UniqueIdentifier>{45d6b9f7-9530-4bda-b33b-07a473ddda73}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tetris\UI">
+      <UniqueIdentifier>{7298f48d-174b-4fc3-b28b-48e08ff6b670}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -58,6 +61,15 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Tetris\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Tetris\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Factorys.cpp">
+      <Filter>Tetris\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseInput.cpp">
+      <Filter>Tetris\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +111,15 @@
     </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>Tetris\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Tetris\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Factorys.h">
+      <Filter>Tetris\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseInput.h">
+      <Filter>Tetris\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
