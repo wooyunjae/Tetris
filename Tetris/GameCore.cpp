@@ -92,13 +92,13 @@ LRESULT GameCore::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		LPCREATESTRUCT pcs = (LPCREATESTRUCT)lParam;
 		GameCore* pGameCore = (GameCore*)pcs->lpCreateParams;
 		// hwnd의 추가메모리에 USERDATA측 pGameCore의 주소를 저장
-		SetWindowLongPtrW(hwnd, GWLP_USERDATA, PtrToUlong(pGameCore));
+		SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pGameCore));
 		result = 1;
 	}
 	else
 	{
 		// hwnd의 추가메모리 USERDATA부분에 저장된 값을 가져옴 -> pGameCore의 주소
-		GameCore* pGameCore = reinterpret_cast<GameCore*>(static_cast<LONG_PTR>(GetWindowLongPtrW(hwnd, GWLP_USERDATA)));
+		GameCore* pGameCore = reinterpret_cast<GameCore*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
 
 		bool wasHandled = false;
 

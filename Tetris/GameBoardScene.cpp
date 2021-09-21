@@ -1,10 +1,16 @@
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <assert.h>
+#include <string>
 #include "GameBoardScene.h"
 #include "GameBoard.h"
 #include "Factorys.h"
 #include "Macro.h"
 #include "CST.h"
 #include "Color.h"
+#include "SoundPlayer.h"
 
 GameBoardScene::GameBoardScene(HWND hwnd, HINSTANCE hInstance)
 	: Scene(hwnd)
@@ -31,6 +37,7 @@ GameBoardScene::~GameBoardScene()
 {
 	DiscardDeviceResources();
 	delete mpGameBoard;
+	delete mpBlockMoveSound;
 }
 
 HRESULT GameBoardScene::Initialize(HINSTANCE hInstance)
@@ -76,8 +83,29 @@ HRESULT GameBoardScene::Initialize(HINSTANCE hInstance)
 		{
 			hr = CreateBitmapGridBlock(mpMainRenderTarget, mpIGrid, D2D1::ColorF::LightSkyBlue, true);
 		}
+		if (SUCCEEDED(hr))
+		{
+			hr = FACTORY->GetDWriteFactory()->CreateTextFormat(
+				L"굴림",
+				NULL,
+				DWRITE_FONT_WEIGHT_NORMAL,
+				DWRITE_FONT_STYLE_NORMAL,
+				DWRITE_FONT_STRETCH_NORMAL,
+				15,
+				L"",
+				&mpText
+			);
+			mpText->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+			mpText->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+		}
 	}
 
+	mpBlockMoveSound = new SoundPlayer();
+	WCHAR path[256];
+	wcsncpy(path, L".\\water_fall.wav", 256);
+	hr = mpBlockMoveSound->LoadAudio(path);
+	std::function<void()> water_fall = std::bind(&SoundPlayer::ForcePlayMusic, mpBlockMoveSound);
+	mpGameBoard->SetBlockMoveSound(water_fall);
 	return hr;
 }
 
@@ -106,11 +134,12 @@ void GameBoardScene::Render()
 
 		ID2D1SolidColorBrush* gameBoardBrush;
 		ID2D1SolidColorBrush* gameScoreBrush;
-
+		ID2D1SolidColorBrush* textBrush = nullptr;
 		//
 		// 매 프레임 마다 게임 화면과 스코어를 그림
 		// 매 프레임 마다 solid color brush를 생성하는 것은 부하가 적음
 		//
+
 		hr = mpMainRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Purple), &gameBoardBrush);
 		if (SUCCEEDED(hr))
 		{
@@ -121,6 +150,72 @@ void GameBoardScene::Render()
 		{
 			mpMainRenderTarget->FillRectangle(scoreBoard, gameScoreBrush);
 		}
+		hr = mpMainRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &textBrush);
+		if (SUCCEEDED(hr))
+		{
+			std::wstring str(L"점수 : ");
+			str += std::to_wstring(mpGameBoard->GetScore());
+			mpMainRenderTarget->DrawText(
+				str.c_str(),
+				str.length(),
+				mpText,
+				D2D1::RectF(CST::BLOCK_SIZE * 10, 0, static_cast<float>(mWidth), 15),
+				textBrush
+			);
+		}
+
+
+		for (unsigned int i = 0; i < 4; i++)
+		{
+			int ScaledblockSize = CST::BLOCK_SIZE * 1 / 3;
+			FLOAT unitLength = (scoreBoard.right - scoreBoard.left) / 2;
+			FLOAT centerX = scoreBoard.left + i % 2 * unitLength + unitLength / 2;
+			FLOAT centerY = scoreBoard.top + i / 2 * (unitLength + 10) + unitLength / 2;
+
+			int blockKind = mpGameBoard->GetBlock(i + 1);
+			mpMainRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+			assert(textBrush != nullptr);
+			mpMainRenderTarget->DrawRectangle(D2D1::RectF(scoreBoard.left + i % 2 * unitLength + 5,
+				scoreBoard.top + i / 2 * unitLength + 5,
+				scoreBoard.left + i % 2 * unitLength + unitLength - 5,
+				scoreBoard.top + i / 2 * unitLength + unitLength - 5),
+				textBrush,
+				3
+			);
+			mpMainRenderTarget->SetTransform(D2D1::Matrix3x2F::Scale(1 / 3.0f, 1 / 3.0f));
+			for (unsigned int ii = 0; ii < 8; ii += 2)
+			{
+				FillRectangle(static_cast<FLOAT>(centerX + ScaledblockSize * CST::BLOCK[blockKind][0][ii] - ScaledblockSize / 2),
+					static_cast<FLOAT>(centerY + ScaledblockSize * CST::BLOCK[blockKind][0][ii + 1] - ScaledblockSize / 2),
+					CST::BLOCK_SIZE,
+					CST::BLOCK_SIZE,
+					GetBlockKindBitmap(blockKind)
+				);
+			}
+		}
+
+		mpMainRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+		D2D1_RECT_F rect = {
+			scoreBoard.left,
+			scoreBoard.bottom - (scoreBoard.right - scoreBoard.left),
+			scoreBoard.right,
+			scoreBoard.bottom
+		};
+		mpMainRenderTarget->DrawRectangle(&rect, textBrush, 3.0);
+		if (mpGameBoard->GetStoredBlock() != CST::EMPTY)
+		{
+			for (unsigned int ii = 0; ii < 8; ii += 2)
+			{
+				FillRectangle(static_cast<FLOAT>(rect.left + (rect.right - rect.left) / 2 + CST::BLOCK_SIZE * CST::BLOCK[mpGameBoard->GetStoredBlock()][0][ii] - CST::BLOCK_SIZE / 2),
+					static_cast<FLOAT>(rect.top + (rect.right - rect.left) / 2 + CST::BLOCK_SIZE * CST::BLOCK[mpGameBoard->GetStoredBlock()][0][ii + 1] - CST::BLOCK_SIZE / 2),
+					CST::BLOCK_SIZE,
+					CST::BLOCK_SIZE,
+					GetBlockKindBitmap(mpGameBoard->GetStoredBlock())
+				);
+			}
+		}
+
 		int(*board)[CST::WIDTH] = mpGameBoard->GetBoard();
 
 		for (unsigned int y = 0; y < CST::HEIGHT; y++)
@@ -133,62 +228,15 @@ void GameBoardScene::Render()
 					static_cast<float>(CST::BLOCK_SIZE * (x + 1)),
 					static_cast<float>(CST::BLOCK_SIZE * (y + 1))
 				};
-				switch (board[y][x])
-				{
-				case CST::EMPTY:
-					mpMainRenderTarget->FillRectangle(
-						rt,
-						mpEmptyGrid
-					);
-					break;
-				case CST::T:
-					mpMainRenderTarget->FillRectangle(
-						rt,
-						mpTGrid
-					);
-					break;
-				case CST::L:
-					mpMainRenderTarget->FillRectangle(
-						rt,
-						mpLGrid
-					);
-					break;
-				case CST::RL:
-					mpMainRenderTarget->FillRectangle(
-						rt,
-						mpRLGrid
-					);
-					break;
-				case CST::Z:
-					mpMainRenderTarget->FillRectangle(
-						rt,
-						mpZGrid
-					);
-					break;
-				case CST::RZ:
-					mpMainRenderTarget->FillRectangle(
-						rt,
-						mpRZGrid
-					);
-					break;
-				case CST::O:
-					mpMainRenderTarget->FillRectangle(
-						rt,
-						mpOGrid
-					);
-					break;
-				case CST::I:
-					mpMainRenderTarget->FillRectangle(
-						rt,
-						mpIGrid
-					);
-					break;
-				default:
-					assert(false);
-				}
+				mpMainRenderTarget->FillRectangle(
+					rt,
+					GetBlockKindBitmap(board[y][x])
+				);
 			}
 		}
-
+		gameBoardBrush->Release();
+		gameScoreBrush->Release();
+		textBrush->Release();
 		mpMainRenderTarget->EndDraw();
 	}
 }
@@ -279,4 +327,57 @@ HRESULT GameBoardScene::CreateBitmapGridBlock(ID2D1HwndRenderTarget*& renderTarg
 		pCompatibleRenderTarget->Release();
 	}
 	return hr;
+}
+
+void GameBoardScene::FillRectangle(FLOAT x, FLOAT y, FLOAT w, FLOAT h, ID2D1BitmapBrush* grid)
+{
+	D2D1_MATRIX_3X2_F originTrs;
+	D2D1_MATRIX_3X2_F trs;
+	mpMainRenderTarget->GetTransform(&originTrs);
+	trs = originTrs;
+
+	trs = trs * D2D1::Matrix3x2F::Translation(x, y);
+	mpMainRenderTarget->SetTransform(&trs);
+	mpMainRenderTarget->FillRectangle(
+		D2D1::RectF(0, 0, w, h),
+		grid
+	);
+	mpMainRenderTarget->SetTransform(&originTrs);
+}
+
+ID2D1BitmapBrush* GameBoardScene::GetBlockKindBitmap(int blockKind)
+{
+	ID2D1BitmapBrush* bitmap;
+	switch (blockKind)
+	{
+	case CST::EMPTY:
+		bitmap = mpEmptyGrid;
+		break;
+	case CST::T:
+		bitmap = mpTGrid;
+		break;
+	case CST::L:
+		bitmap = mpLGrid;
+		break;
+	case CST::RL:
+		bitmap = mpRLGrid;
+		break;
+	case CST::Z:
+		bitmap = mpZGrid;
+		break;
+	case CST::RZ:
+		bitmap = mpRZGrid;
+		break;
+	case CST::O:
+		bitmap = mpOGrid;
+		break;
+	case CST::I:
+		bitmap = mpIGrid;
+		break;
+	default:
+		bitmap = nullptr;
+		assert(false);
+		break;
+	}
+	return bitmap;
 }

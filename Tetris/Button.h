@@ -35,7 +35,7 @@ private:
 
 	RECT mRect;
 
-	eState mState;
+	eState meState;
 	bool isClicked;
 	std::function<void()> mAction;
 };

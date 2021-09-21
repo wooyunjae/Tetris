@@ -3,6 +3,7 @@
 #include "Scene.h"
 
 class GameBoard;
+class SoundPlayer;
 
 class GameBoardScene : public Scene
 {
@@ -19,7 +20,11 @@ private:
 	HRESULT CreateDeviceSource();
 	HRESULT CreateBitmapGridBlock(ID2D1HwndRenderTarget*& renderTarget, ID2D1BitmapBrush*& gridBitmap, D2D1::ColorF::Enum color, bool isTwoTone);
 
+	void FillRectangle(FLOAT x, FLOAT y, FLOAT w, FLOAT h, ID2D1BitmapBrush* grid);
+	ID2D1BitmapBrush* GetBlockKindBitmap(int blockKind);
 private:
+	// >> 
+
 	// >> 장치 의존
 	ID2D1BitmapBrush* mpEmptyGrid;
 	ID2D1BitmapBrush* mpTGrid;
@@ -29,11 +34,13 @@ private:
 	ID2D1BitmapBrush* mpRZGrid;
 	ID2D1BitmapBrush* mpOGrid;
 	ID2D1BitmapBrush* mpIGrid;
+	
+	IDWriteTextFormat* mpText;
 
 	// >> 일반 변수
 	unsigned int mWidth;
 	unsigned int mHeight;
 
 	GameBoard* mpGameBoard;
+	SoundPlayer* mpBlockMoveSound;
 };
-

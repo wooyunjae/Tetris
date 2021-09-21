@@ -12,7 +12,7 @@ Button::Button(HWND parent, HINSTANCE hInstance, std::wstring name, RECT rect)
 	, mpImage(nullptr)
 	, mpRenderTarget(nullptr)
 	, mRect(rect)
-	, mState(eState::IDLE)
+	, meState(eState::IDLE)
 	, isClicked(false)
 	, mAction(nullptr)
 {
@@ -43,11 +43,6 @@ Button::Button(HWND parent, HINSTANCE hInstance, std::wstring name, RECT rect)
 			&mpRenderTarget
 		);
 	}
-	TRACKMOUSEEVENT tme;
-	tme.cbSize = sizeof(tme);
-	tme.hwndTrack = mHwnd;
-	tme.dwFlags = TME_LEAVE;
-	TrackMouseEvent(&tme);
 }
 
 Button::~Button()
@@ -64,7 +59,7 @@ void Button::Render()
 	D2D1_RECT_F dst = { 0, 0, size.width, size.height / 3 };
 	D2D1_RECT_F src;
 	mpRenderTarget->BeginDraw();
-	switch (mState)
+	switch (meState)
 	{
 	case eState::IDLE:
 		src = { 0, 0, size.width, size.height / 3 * 1 };
@@ -111,13 +106,13 @@ void Button::Update()
 	RECT rt;
 	GetCursorPos(&ps);
 	GetWindowRect(mHwnd, &rt);
-
+	
 	if (rt.left > ps.x
 		|| rt.right < ps.x
 		|| rt.top > ps.y
 		|| rt.bottom < ps.y)
 	{
-		mState = eState::IDLE;
+		meState = eState::IDLE;
 	}
 }
 
@@ -174,12 +169,12 @@ LRESULT Button::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		LPCREATESTRUCT pcs = (LPCREATESTRUCT)lParam;
 		Button* pButton = (Button*)pcs->lpCreateParams;
-		SetWindowLongPtrW(hwnd, GWLP_USERDATA, PtrToUlong(pButton));
+		SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pButton));
 		result = 1;
 	}
 	else
 	{
-		Button* pButton = reinterpret_cast<Button*>(static_cast<LONG_PTR>(GetWindowLongPtrW(hwnd, GWLP_USERDATA)));
+		Button* pButton = reinterpret_cast<Button*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 		bool wasHandled = false;
 		if (pButton)
 		{
@@ -188,7 +183,7 @@ LRESULT Button::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			case WM_LBUTTONDOWN:
 				SetCapture(pButton->mHwnd);
 				pButton->isClicked = true;
-				pButton->mState = eState::CLICKED;
+				pButton->meState = eState::CLICKED;
 				break;
 			case WM_MOUSEMOVE:
 			{
@@ -204,11 +199,11 @@ LRESULT Button::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				{
 					if (pButton->isClicked)
 					{
-						pButton->mState = eState::CLICKED;
+						pButton->meState = eState::CLICKED;
 					}
 					else
 					{
-						pButton->mState = eState::ON_MOUSE;
+						pButton->meState = eState::ON_MOUSE;
 					}
 				}
 				break;

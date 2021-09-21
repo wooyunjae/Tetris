@@ -2,6 +2,7 @@
 #include "Scene.h"
 
 class Button;
+class SoundPlayer;
 
 class MainScene :
 	public Scene
@@ -17,7 +18,8 @@ public:
 private:
 	ID2D1Bitmap* mpMainScreen;
 	HINSTANCE mhInstance;
-	Button* mStartButton;
-	Button* mCloseButton;
+	Button* mpStartButton;
+	Button* mpCloseButton;
+	SoundPlayer* mpPlayer;
 };
 

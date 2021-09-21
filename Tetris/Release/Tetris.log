@@ -1,0 +1,21 @@
+﻿  Bitmap.cpp
+  Button.cpp
+  Color.cpp
+  SDKwavefile.cpp
+  Factorys.cpp
+  GameBoard.cpp
+  GameBoardScene.cpp
+  GameCore.cpp
+  KeyInput.cpp
+  main.cpp
+  MainScene.cpp
+  Scene.cpp
+  SceneManager.cpp
+  SoundPlayer.cpp
+  Time.cpp
+  XAudio.cpp
+  코드를 생성하고 있습니다.
+  Previous IPDB not found, fall back to full compilation.
+  All 617 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  Tetris.vcxproj -> C:\Users\Woo\Documents\MyGames\Tetris\Release\Tetris.exe

@@ -27,6 +27,9 @@
     <Filter Include="Tetris\UI">
       <UniqueIdentifier>{7298f48d-174b-4fc3-b28b-48e08ff6b670}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tetris\Sound">
+      <UniqueIdentifier>{525de842-05e7-46ef-a846-4ad07ad12df0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -68,8 +71,14 @@
     <ClCompile Include="Factorys.cpp">
       <Filter>Tetris\Core</Filter>
     </ClCompile>
-    <ClCompile Include="MouseInput.cpp">
-      <Filter>Tetris\Input</Filter>
+    <ClCompile Include="SoundPlayer.cpp">
+      <Filter>Tetris\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="XAudio.cpp">
+      <Filter>Tetris\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SDKwavefile.cpp">
+      <Filter>Tetris\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,8 +127,14 @@
     <ClInclude Include="Factorys.h">
       <Filter>Tetris\Core</Filter>
     </ClInclude>
-    <ClInclude Include="MouseInput.h">
-      <Filter>Tetris\Input</Filter>
+    <ClInclude Include="SoundPlayer.h">
+      <Filter>Tetris\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="XAudio.h">
+      <Filter>Tetris\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SDKwavefile.h">
+      <Filter>Tetris\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

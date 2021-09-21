@@ -11,13 +11,14 @@ private:
 public:
 	static Factorys* GetInstance();
 	static void DeleteInstance();
+	HRESULT Init();
 	ID2D1Factory* GetFactory();
 	IWICImagingFactory* GetWICFactory();
-private:
-	HRESULT Init();
+	IDWriteFactory* GetDWriteFactory();
 
 private:
-	static Factorys* mInstance;
+	static Factorys* mpInstance;
 	ID2D1Factory* mpD2DFactory;
 	IWICImagingFactory* mpWICFactory;
+	IDWriteFactory* mpDWriteFactory;
 };

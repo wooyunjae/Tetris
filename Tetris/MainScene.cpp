@@ -1,3 +1,7 @@
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <assert.h>
 #include "GraphicsAPIHeader.h"
 #include "MainScene.h"
@@ -7,6 +11,9 @@
 #include "GameBoardScene.h"
 #include "Button.h"
 #include "Factorys.h"
+#include "SoundPlayer.h"
+
+
 MainScene::MainScene(HWND hwnd, HINSTANCE hInstance)
 	: Scene(hwnd)
 	, mhInstance(hInstance)
@@ -19,17 +26,20 @@ MainScene::MainScene(HWND hwnd, HINSTANCE hInstance)
 
 MainScene::~MainScene()
 {
-	delete mCloseButton;
-	delete mStartButton;
+	delete mpCloseButton;
+	delete mpStartButton;
+	delete mpPlayer;
 }
 
 HRESULT MainScene::Initialize(HINSTANCE hInstance)
 {
 	HRESULT hr = S_OK;
+	ID2D1Factory* fact = FACTORY->GetFactory();
 	if (!mpMainRenderTarget)
 	{
 		D2D1_SIZE_U size = D2D1::SizeU(mWidth, mHeight);
-		hr = FACTORY->GetFactory()->CreateHwndRenderTarget(
+		
+		hr = fact->CreateHwndRenderTarget(
 			D2D1::RenderTargetProperties(),
 			D2D1::HwndRenderTargetProperties(mHwnd, size),
 			&mpMainRenderTarget
@@ -42,19 +52,26 @@ HRESULT MainScene::Initialize(HINSTANCE hInstance)
 		if (SUCCEEDED(hr))
 		{
 			RECT rt = { 0,0,0,0 };
-			mStartButton = new Button(mHwnd, hInstance, std::wstring(L"StartButton"), rt);
+			mpStartButton = new Button(mHwnd, hInstance, std::wstring(L"StartButton"), rt);
 			RECT size;
 			GetWindowRect(mHwnd, &size);
-			mStartButton->SetArea((size.right - size.left) / 2 - 50, (size.bottom - size.top) / 2 - 100, 100, 50);
-			mStartButton->SetBitmap(L".\\StartButton.jpeg", 0, 0);
+			mpStartButton->SetArea((size.right - size.left) / 2 - 50, (size.bottom - size.top) / 2 - 100, 100, 50);
+			mpStartButton->SetBitmap(L".\\StartButton.jpeg", 0, 0);
 			std::function<void()> start = std::bind(&SceneManager::SetScene, SM, new GameBoardScene(mHwnd, mhInstance));
-			mStartButton->SetAction(start);
+			mpStartButton->SetAction(start);
 
-			mCloseButton = new Button(mHwnd, hInstance, std::wstring(L"CloseButton"), rt);
-			mCloseButton->SetArea((size.right - size.left) / 2 - 50, (size.bottom - size.top) / 2, 100, 50);
-			mCloseButton->SetBitmap(L".\\CloseButton.jpeg", 0, 0);
+			mpCloseButton = new Button(mHwnd, hInstance, std::wstring(L"CloseButton"), rt);
+			mpCloseButton->SetArea((size.right - size.left) / 2 - 50, (size.bottom - size.top) / 2, 100, 50);
+			mpCloseButton->SetBitmap(L".\\CloseButton.jpeg", 0, 0);
 			std::function<void()> close = std::bind(SendMessage, mHwnd, WM_DESTROY, 0, 0);
-			mCloseButton->SetAction(close);
+			mpCloseButton->SetAction(close);
+		}
+		if (SUCCEEDED(hr))
+		{
+			mpPlayer = new SoundPlayer();
+			WCHAR path[256];
+			wcsncpy(path, L".\\tetris_bgm.wav", 256);
+			hr = mpPlayer->LoadAudio(path);
 		}
 	}
 	return hr;
@@ -62,8 +79,17 @@ HRESULT MainScene::Initialize(HINSTANCE hInstance)
 
 void MainScene::Update()
 {
-	mStartButton->Update();
-	mCloseButton->Update();
+	mpStartButton->Update();
+	mpCloseButton->Update();
+	mpPlayer->PlayMusic();
+	if (GetAsyncKeyState(VK_UP))
+	{
+		mpPlayer->IncreaseVolumn();
+	}
+	else if (GetAsyncKeyState(VK_DOWN))
+	{
+		mpPlayer->DecreaseVolumn();
+	}
 }
 
 void MainScene::Render()
@@ -72,6 +98,6 @@ void MainScene::Render()
 	D2D1_SIZE_F size = mpMainScreen->GetSize();
 	mpMainRenderTarget->DrawBitmap(mpMainScreen, D2D1::RectF(0.0f, 0.0f, size.width, size.height));
 	mpMainRenderTarget->EndDraw();
-	mStartButton->Render();
-	mCloseButton->Render();
+	mpStartButton->Render();
+	mpCloseButton->Render();
 }

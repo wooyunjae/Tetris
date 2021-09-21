@@ -2,36 +2,37 @@
 
 #include "Factorys.h"
 #include "Macro.h"
-Factorys* Factorys::mInstance = nullptr;
+Factorys* Factorys::mpInstance = nullptr;
 
 Factorys::Factorys()
 	: mpD2DFactory(nullptr)
 	, mpWICFactory(nullptr)
+	, mpDWriteFactory(nullptr)
 {
-	assert(SUCCEEDED(Init()));
 }
 
 Factorys::~Factorys()
 {
 	SAFE_RELEASE(mpD2DFactory);
 	SAFE_RELEASE(mpWICFactory);
+	SAFE_RELEASE(mpDWriteFactory);
 }
 
 Factorys* Factorys::GetInstance()
 {
-	if (!mInstance)
+	if (!mpInstance)
 	{
-		mInstance = new Factorys();
+		mpInstance = new Factorys();
 	}
-	return mInstance;
+	return mpInstance;
 }
 
 void Factorys::DeleteInstance()
 {
-	if (mInstance)
+	if (mpInstance)
 	{
-		delete mInstance;
-		mInstance = nullptr;
+		delete mpInstance;
+		mpInstance = nullptr;
 	}
 }
 
@@ -42,6 +43,14 @@ HRESULT Factorys::Init()
 	if (SUCCEEDED(hr))
 	{
 		hr = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&mpWICFactory));
+	}
+	if (SUCCEEDED(hr))
+	{
+		hr = DWriteCreateFactory(
+			DWRITE_FACTORY_TYPE_SHARED,
+			__uuidof(mpDWriteFactory),
+			reinterpret_cast<IUnknown**>(&mpDWriteFactory)
+		);
 	}
 	return hr;
 }
@@ -54,4 +63,9 @@ ID2D1Factory* Factorys::GetFactory()
 IWICImagingFactory* Factorys::GetWICFactory()
 {
 	return mpWICFactory;
+}
+
+IDWriteFactory* Factorys::GetDWriteFactory()
+{
+	return mpDWriteFactory;
 }

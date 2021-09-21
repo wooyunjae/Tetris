@@ -1,29 +1,30 @@
 #include "KeyInput.h"
 
-KeyInput* KeyInput::mInstance = nullptr;
+KeyInput* KeyInput::mpInstance = nullptr;
 
 KeyInput::~KeyInput()
 {
-	if (mInstance)
+	if (mpInstance)
 	{
-		delete mInstance;
+		delete mpInstance;
 	}
 }
 
 KeyInput* KeyInput::GetInstance()
 {
-	if (!mInstance)
+	if (!mpInstance)
 	{
-		mInstance = new KeyInput();
-		mInstance->mKeys.insert(std::make_pair(eKeySet::UP,eKeyState::UP));
-		mInstance->mKeys.insert(std::make_pair(eKeySet::DOWN, eKeyState::UP));
-		mInstance->mKeys.insert(std::make_pair(eKeySet::LEFT, eKeyState::UP));
-		mInstance->mKeys.insert(std::make_pair(eKeySet::RIGHT, eKeyState::UP));
-		mInstance->mKeys.insert(std::make_pair(eKeySet::SPACE, eKeyState::UP));
-		mInstance->mKeys.insert(std::make_pair(eKeySet::P, eKeyState::UP));
-		mInstance->mKeys.insert(std::make_pair(eKeySet::R, eKeyState::UP));
+		mpInstance = new KeyInput();
+		mpInstance->mKeys.insert(std::make_pair(eKeySet::UP,eKeyState::UP));
+		mpInstance->mKeys.insert(std::make_pair(eKeySet::DOWN, eKeyState::UP));
+		mpInstance->mKeys.insert(std::make_pair(eKeySet::LEFT, eKeyState::UP));
+		mpInstance->mKeys.insert(std::make_pair(eKeySet::RIGHT, eKeyState::UP));
+		mpInstance->mKeys.insert(std::make_pair(eKeySet::SPACE, eKeyState::UP));
+		mpInstance->mKeys.insert(std::make_pair(eKeySet::P, eKeyState::UP));
+		mpInstance->mKeys.insert(std::make_pair(eKeySet::R, eKeyState::UP));
+		mpInstance->mKeys.insert(std::make_pair(eKeySet::S, eKeyState::UP));
 	}
-	return mInstance;
+	return mpInstance;
 }
 
 void KeyInput::Update()

@@ -19,7 +19,7 @@ public:
 	bool IsKeyUp(int key);
 
 private:
-	static KeyInput* mInstance;
+	static KeyInput* mpInstance;
 	std::unordered_map<eKeySet, eKeyState> mKeys;
 };
 
@@ -33,6 +33,7 @@ enum class eKeySet
 	SPACE = VK_SPACE,
 	P = 0x50,
 	R = 0x52,
+	S = 0x53
 };
 
 enum class eKeyState
